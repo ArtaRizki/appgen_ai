@@ -1,0 +1,17 @@
+node_modules
+dist
+.env
+.env.local
+.DS_Store
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+C:\Users\arta\.gemini\antigravity\brain\1a637055-5a63-4086-88a0-7fd8f9fce2f0\*.png
