@@ -54,7 +54,7 @@ export class VendingFinderService {
     const mockLeads: VendingLead[] = [
       {
         name: `${category} Center ${location}`,
-        address: `Jl. Utama No. 1, ${location}`,
+        address: `123 Main St, ${location}`,
         phone: '021-555-0101',
         website: `https://${category.toLowerCase().replace(/\s/g, '')}-${location.toLowerCase()}.com`,
         category,
@@ -63,7 +63,7 @@ export class VendingFinderService {
       },
       {
         name: `${location} Business Tower`,
-        address: `Jl. Sudirman Kav 21, ${location}`,
+        address: `45 Business Ave, ${location}`,
         phone: '021-555-0202',
         category: 'Office',
         source: 'LinkedIn (Simulated)',

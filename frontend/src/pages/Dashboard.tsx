@@ -42,15 +42,15 @@ export default function Dashboard() {
             </div>
             <div>
               <h1 className="text-2xl font-bold text-white tracking-tight">
-                Selamat Datang, {user?.name?.split(' ')[0]} 👋
+                Welcome back, {user?.name?.split(' ')[0]} 👋
               </h1>
               <p className="text-sm text-gray-400">
-                {new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
               </p>
             </div>
           </div>
           <p className="text-gray-400 max-w-2xl leading-relaxed">
-            Pusat otomasi ekosistem <strong>aidigicube.com</strong>. Mulai cari leads, audit SEO, atau buat konten AI untuk 6+ website Anda hari ini.
+            Central automation hub for the <strong>aidigicube.com</strong> ecosystem. Start finding leads, auditing SEO, or generating AI content for your 6+ websites today.
           </p>
         </div>
         {/* Abstract background element */}
@@ -82,7 +82,7 @@ export default function Dashboard() {
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-2">
               <Wrench className="w-4 h-4 text-brand-blue" />
-              <h2 className="text-sm font-bold text-gray-300 uppercase tracking-widest">Aplikasi Aktif</h2>
+              <h2 className="text-sm font-bold text-gray-300 uppercase tracking-widest">Active Applications</h2>
             </div>
           </div>
 
@@ -92,7 +92,7 @@ export default function Dashboard() {
             </div>
           ) : activeTools.length === 0 ? (
             <div className="card p-12 text-center text-gray-500 text-sm italic border-dashed border-border">
-              Belum ada tool yang tersedia
+              No tools available yet
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -111,11 +111,11 @@ export default function Dashboard() {
             </h3>
             <div className="space-y-2">
               <Link to="/sites" className="flex items-center justify-between p-3 rounded-xl bg-bg-tertiary hover:bg-bg-primary border border-border hover:border-brand-blue/30 transition-all group">
-                <span className="text-xs text-gray-300">Tambah Website Baru</span>
+                <span className="text-xs text-gray-300">Add New Website</span>
                 <ArrowRight className="w-3 h-3 text-gray-600 group-hover:text-brand-blue" />
               </Link>
               <Link to="/tools/data-scraper" className="flex items-center justify-between p-3 rounded-xl bg-bg-tertiary hover:bg-bg-primary border border-border hover:border-brand-blue/30 transition-all group">
-                <span className="text-xs text-gray-300">Mulai Web Scraping</span>
+                <span className="text-xs text-gray-300">Start Web Scraping</span>
                 <ArrowRight className="w-3 h-3 text-gray-600 group-hover:text-brand-blue" />
               </Link>
             </div>
@@ -138,10 +138,10 @@ export default function Dashboard() {
                 </div>
               ))}
               {(!sitesData || sitesData.length === 0) && (
-                <p className="text-[10px] text-gray-600 italic">Belum ada project terdaftar</p>
+                <p className="text-[10px] text-gray-600 italic">No projects registered yet</p>
               )}
               <Link to="/sites" className="block text-center text-[10px] text-brand-blue font-bold uppercase tracking-widest pt-4 border-t border-border hover:underline">
-                Lihat Semua Project
+                View All Projects
               </Link>
             </div>
           </div>

@@ -28,7 +28,7 @@ export class AiGeneratorService {
   }
 
   async execute(input: AiGeneratorInput): Promise<AiGeneratorResult> {
-    const { prompt, type, tone = 'professional', length = 'medium', language = 'Indonesian' } = input;
+    const { prompt, type, tone = 'professional', length = 'medium', language = 'English' } = input;
 
     const systemPrompt = this.getSystemPrompt(type, tone, length, language);
     const userPrompt = `Topic/Instruction: ${prompt}`;

@@ -44,7 +44,7 @@ export default function Login() {
             <Wrench className="w-6 h-6 text-brand-blue" />
           </div>
           <h1 className="text-2xl font-bold text-white">Adigicube Tools</h1>
-          <p className="text-sm text-gray-500 mt-1">Central portal untuk ecosystem tools</p>
+          <p className="text-sm text-gray-500 mt-1">Central portal for ecosystem tools</p>
         </div>
 
         {/* Form card */}

@@ -48,10 +48,10 @@ export default function VendingFinder() {
         pushToDataBridge,
       });
       setResult(data.result);
-      toast.success(`Berhasil menemukan ${data.result.totalFound} calon klien!`);
+      toast.success(`Successfully found ${data.result.totalFound} potential clients!`);
       queryClient.invalidateQueries({ queryKey: ['history', TOOL_SLUG] });
     } catch (err: any) {
-      toast.error(err.response?.data?.error || 'Pencarian gagal');
+      toast.error(err.response?.data?.error || 'Search failed');
     } finally {
       setLoading(false);
     }
@@ -66,7 +66,7 @@ export default function VendingFinder() {
         </div>
         <div>
           <h1 className="text-xl font-bold text-white">Vending Client Finder</h1>
-          <p className="text-sm text-gray-500">Cari calon klien strategis untuk penempatan mesin vending</p>
+          <p className="text-sm text-gray-500">Find strategic clients for vending machine placement</p>
         </div>
       </div>
 
@@ -98,18 +98,18 @@ export default function VendingFinder() {
           {/* Left: Tool config */}
           <div className="col-span-12 lg:col-span-4">
             <div className="card p-5 space-y-5">
-              <h3 className="text-sm font-semibold text-white mb-2">Pencarian Baru</h3>
+              <h3 className="text-sm font-semibold text-white mb-2">New Search</h3>
               
               <form onSubmit={handleSearch} className="space-y-4">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-medium text-gray-400">Lokasi</label>
+                  <label className="text-xs font-medium text-gray-400">Location</label>
                   <div className="relative">
                     <MapPin className="absolute left-3 top-2.5 w-4 h-4 text-gray-500" />
                     <input
                       type="text"
                       value={location}
                       onChange={(e) => setLocation(e.target.value)}
-                      placeholder="Contoh: Jakarta Selatan, Bandung..."
+                      placeholder="Example: South Jakarta, Bandung..."
                       className="input pl-9"
                       required
                     />
@@ -117,17 +117,17 @@ export default function VendingFinder() {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-medium text-gray-400">Kategori Bisnis</label>
+                  <label className="text-xs font-medium text-gray-400">Business Category</label>
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
                     className="input"
                   >
-                    <option value="Office">Perkantoran / Coworking</option>
+                    <option value="Office">Office / Coworking</option>
                     <option value="Gym">Gym / Fitness Center</option>
-                    <option value="Hospital">Rumah Sakit / Klinik</option>
-                    <option value="Apartment">Apartemen</option>
-                    <option value="School">Sekolah / Universitas</option>
+                    <option value="Hospital">Hospital / Clinic</option>
+                    <option value="Apartment">Apartment</option>
+                    <option value="School">School / University</option>
                   </select>
                 </div>
 
@@ -140,11 +140,11 @@ export default function VendingFinder() {
                       className="w-4 h-4 rounded border-border bg-bg-secondary text-brand-orange focus:ring-brand-orange"
                     />
                     <span className="text-sm text-gray-300 group-hover:text-white transition-colors">
-                      Kirim otomatis ke DataBridge
+                      Auto-push to DataBridge
                     </span>
                   </label>
                   <p className="text-[10px] text-gray-600 mt-1 ml-6">
-                    Data akan langsung tersedia untuk tim marketing di aidigicell.com
+                    Data will be instantly available for the marketing team at aidigicell.com
                   </p>
                 </div>
 
@@ -157,7 +157,7 @@ export default function VendingFinder() {
                     <div className="w-5 h-5 rounded-full border-2 border-white border-t-transparent animate-spin mx-auto" />
                   ) : (
                     <span className="flex items-center justify-center gap-2">
-                      <Zap className="w-4 h-4" /> Cari Klien
+                      <Zap className="w-4 h-4" /> Find Clients
                     </span>
                   )}
                 </button>
@@ -171,7 +171,7 @@ export default function VendingFinder() {
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
                   <Table className="w-4 h-4 text-gray-400" />
-                  <h3 className="text-sm font-medium text-gray-300">Hasil Pencarian</h3>
+                  <h3 className="text-sm font-medium text-gray-300">Search Results</h3>
                 </div>
                 {result && (
                   <span className="px-2 py-0.5 rounded-full bg-brand-orange/10 border border-brand-orange/20 text-[10px] font-medium text-brand-orange">
@@ -183,14 +183,14 @@ export default function VendingFinder() {
               {!result && !loading && (
                 <div className="flex flex-col items-center justify-center py-20 text-gray-600 text-sm italic">
                   <Store className="w-12 h-12 mb-3 opacity-20" />
-                  Masukkan lokasi dan kategori untuk memulai pencarian klien
+                  Enter location and category to start finding clients
                 </div>
               )}
 
               {loading && (
                 <div className="flex flex-col items-center justify-center py-20">
                   <div className="w-10 h-10 rounded-full border-2 border-brand-orange border-t-transparent animate-spin mb-4" />
-                  <p className="text-sm text-gray-400">Sedang men-scrap data klien potensial...</p>
+                  <p className="text-sm text-gray-400">Scraping potential client data...</p>
                 </div>
               )}
 
@@ -213,10 +213,10 @@ export default function VendingFinder() {
                     <table className="w-full text-sm">
                       <thead>
                         <tr className="bg-bg-tertiary text-gray-400 text-xs font-medium">
-                          <th className="px-4 py-3 text-left">Nama Bisnis</th>
-                          <th className="px-4 py-3 text-left">Alamat</th>
-                          <th className="px-4 py-3 text-left">Kontak</th>
-                          <th className="px-4 py-3 text-right">Aksi</th>
+                          <th className="px-4 py-3 text-left">Business Name</th>
+                          <th className="px-4 py-3 text-left">Address</th>
+                          <th className="px-4 py-3 text-left">Contact</th>
+                          <th className="px-4 py-3 text-right">Actions</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-border">

@@ -40,10 +40,10 @@ export default function SiteAuditor() {
     try {
       const { data } = await api.post(`/tools/${TOOL_SLUG}/execute`, { url });
       setResult(data.result);
-      toast.success('Audit selesai!');
+      toast.success('Audit completed!');
       queryClient.invalidateQueries({ queryKey: ['history', TOOL_SLUG] });
     } catch (err: any) {
-      toast.error(err.response?.data?.error || 'Gagal melakukan audit');
+      toast.error(err.response?.data?.error || 'Audit failed');
     } finally {
       setLoading(false);
     }
@@ -67,7 +67,7 @@ export default function SiteAuditor() {
         </div>
         <div>
           <h1 className="text-xl font-bold text-white">SEO & Site Auditor</h1>
-          <p className="text-sm text-gray-500">Audit kesehatan teknis dan SEO website Anda secara instan</p>
+          <p className="text-sm text-gray-500">Audit your website's technical health and SEO instantly</p>
         </div>
       </div>
 
@@ -105,7 +105,7 @@ export default function SiteAuditor() {
                   type="text"
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
-                  placeholder="Masukkan URL website (misal: aidigicube.com)"
+                  placeholder="Enter website URL (e.g., aidigicube.com)"
                   className="input pl-9"
                   required
                 />
@@ -119,14 +119,14 @@ export default function SiteAuditor() {
           {!result && !loading && (
             <div className="flex flex-col items-center justify-center py-20 text-gray-600 text-sm">
               <Layout className="w-16 h-16 mb-4 opacity-10" />
-              Masukkan URL di atas untuk melihat laporan audit SEO
+              Enter a URL above to see the SEO audit report
             </div>
           )}
 
           {loading && (
             <div className="flex flex-col items-center justify-center py-20">
               <div className="w-12 h-12 rounded-full border-2 border-brand-green border-t-transparent animate-spin mb-4" />
-              <p className="text-sm text-gray-400">Sedang menganalisis struktur website...</p>
+              <p className="text-sm text-gray-400">Analyzing website structure...</p>
             </div>
           )}
 

@@ -42,10 +42,10 @@ export default function SiteManager() {
       setUrl('');
       setUsername('');
       setAppPassword('');
-      toast.success('Website berhasil ditambahkan');
+      toast.success('Website added successfully');
     },
     onError: (err: any) => {
-      toast.error(err.response?.data?.error || 'Gagal menambahkan website');
+      toast.error(err.response?.data?.error || 'Failed to add website');
     },
   });
 
@@ -55,7 +55,7 @@ export default function SiteManager() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['sites'] });
-      toast.success('Website dihapus');
+      toast.success('Website deleted');
     },
   });
 
@@ -68,21 +68,21 @@ export default function SiteManager() {
           </div>
           <div>
             <h1 className="text-xl font-bold text-white">Project & Site Manager</h1>
-            <p className="text-sm text-gray-500">Kelola 6+ website Anda untuk otomasi konten</p>
+            <p className="text-sm text-gray-500">Manage your 6+ websites for content automation</p>
           </div>
         </div>
         <button
           onClick={() => setIsAdding(!isAdding)}
           className="btn btn-primary flex items-center gap-2"
         >
-          <Plus className="w-4 h-4" /> Tambah Site
+          <Plus className="w-4 h-4" /> Add Site
         </button>
       </div>
 
       {isAdding && (
         <div className="card p-6 mb-8 border-brand-blue/30 bg-brand-blue/5 animate-slide-up">
           <h3 className="text-sm font-bold text-white mb-4 flex items-center gap-2">
-            <Plus className="w-4 h-4" /> Tambah Website Baru
+            <Plus className="w-4 h-4" /> Add New Website
           </h3>
           <form
             onSubmit={(e) => {
@@ -92,11 +92,11 @@ export default function SiteManager() {
             className="grid grid-cols-2 gap-4"
           >
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-gray-400">Nama Situs</label>
-              <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Contoh: Aidigicell Blog" className="input" required />
+              <label className="text-xs font-medium text-gray-400">Site Name</label>
+              <input value={name} onChange={(e) => setName(e.target.value)} placeholder="Example: Aidigicell Blog" className="input" required />
             </div>
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-gray-400">URL Situs</label>
+              <label className="text-xs font-medium text-gray-400">Site URL</label>
               <input value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://example.com" className="input" required />
             </div>
             <div className="space-y-1.5">
@@ -121,9 +121,9 @@ export default function SiteManager() {
               </div>
             </div>
             <div className="col-span-2 flex justify-end gap-3 mt-2">
-              <button type="button" onClick={() => setIsAdding(false)} className="btn btn-secondary text-xs px-4">Batal</button>
+              <button type="button" onClick={() => setIsAdding(false)} className="btn btn-secondary text-xs px-4">Cancel</button>
               <button type="submit" disabled={addMutation.isPending} className="btn btn-primary text-xs px-6">
-                {addMutation.isPending ? 'Menyimpan...' : 'Simpan Website'}
+                {addMutation.isPending ? 'Saving...' : 'Save Website'}
               </button>
             </div>
           </form>
@@ -133,14 +133,14 @@ export default function SiteManager() {
       {isLoading ? (
         <div className="flex flex-col items-center justify-center py-20">
           <div className="w-10 h-10 rounded-full border-2 border-brand-blue border-t-transparent animate-spin mb-4" />
-          <p className="text-sm text-gray-500">Memuat daftar website...</p>
+          <p className="text-sm text-gray-500">Loading website list...</p>
         </div>
       ) : sites?.length === 0 ? (
         <div className="card p-20 text-center flex flex-col items-center gap-4">
           <Globe className="w-16 h-16 text-gray-700 opacity-20" />
-          <p className="text-gray-500 italic text-sm">Belum ada website yang terdaftar.</p>
+          <p className="text-gray-500 italic text-sm">No websites registered yet.</p>
           <button onClick={() => setIsAdding(true)} className="text-brand-blue text-sm font-medium hover:underline">
-            Tambah website pertama Anda
+            Add your first website
           </button>
         </div>
       ) : (
@@ -162,7 +162,7 @@ export default function SiteManager() {
                   </a>
                   <button
                     onClick={() => {
-                      if (confirm('Hapus website ini?')) deleteMutation.mutate(site.id);
+                      if (confirm('Delete this website?')) deleteMutation.mutate(site.id);
                     }}
                     className="p-2 rounded-lg hover:bg-red-500/10 text-gray-500 hover:text-red-400 transition-all"
                   >

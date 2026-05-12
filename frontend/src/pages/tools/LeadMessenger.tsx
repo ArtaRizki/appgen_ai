@@ -33,7 +33,7 @@ export default function LeadMessenger() {
     const recipients = recipientsRaw.split(/[\n,]+/).map(r => r.trim()).filter(r => r.length > 0);
     
     if (recipients.length === 0) {
-      return toast.error('Daftar penerima tidak boleh kosong');
+      return toast.error('Recipient list cannot be empty');
     }
 
     setLoading(true);
@@ -47,10 +47,10 @@ export default function LeadMessenger() {
         message,
       });
       setResult(data.result);
-      toast.success(`Berhasil memproses pengiriman ke ${recipients.length} penerima!`);
+      toast.success(`Successfully processed delivery to ${recipients.length} recipients!`);
       queryClient.invalidateQueries({ queryKey: ['history', TOOL_SLUG] });
     } catch (err: any) {
-      toast.error(err.response?.data?.error || 'Gagal mengirim pesan');
+      toast.error(err.response?.data?.error || 'Failed to send messages');
     } finally {
       setLoading(false);
     }
@@ -65,7 +65,7 @@ export default function LeadMessenger() {
         </div>
         <div>
           <h1 className="text-xl font-bold text-white">Lead Messenger</h1>
-          <p className="text-sm text-gray-500">Kirim pesan kampanye marketing via Email atau WhatsApp</p>
+          <p className="text-sm text-gray-500">Send marketing campaigns via Email or WhatsApp</p>
         </div>
       </div>
 
@@ -99,7 +99,7 @@ export default function LeadMessenger() {
             <div className="card p-6 space-y-6">
               <div className="flex items-center gap-2 mb-2">
                 <Users className="w-4 h-4 text-brand-coral" />
-                <h3 className="text-sm font-semibold text-white">Tulis Pesan Kampanye</h3>
+                <h3 className="text-sm font-semibold text-white">Compose Campaign</h3>
               </div>
               
               <form onSubmit={handleSend} className="space-y-5">
@@ -127,7 +127,7 @@ export default function LeadMessenger() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-xs font-medium text-gray-400">Penerima (Satu per baris)</label>
+                  <label className="text-xs font-medium text-gray-400">Recipients (One per line)</label>
                   <textarea
                     value={recipientsRaw}
                     onChange={(e) => setRecipientsRaw(e.target.value)}
@@ -139,12 +139,12 @@ export default function LeadMessenger() {
 
                 {platform === 'email' && (
                   <div className="space-y-2">
-                    <label className="text-xs font-medium text-gray-400">Subjek Email</label>
+                    <label className="text-xs font-medium text-gray-400">Email Subject</label>
                     <input
                       type="text"
                       value={subject}
                       onChange={(e) => setSubject(e.target.value)}
-                      placeholder="Masukkan subjek kampanye..."
+                      placeholder="Enter campaign subject..."
                       className="input"
                       required
                     />
@@ -152,11 +152,11 @@ export default function LeadMessenger() {
                 )}
 
                 <div className="space-y-2">
-                  <label className="text-xs font-medium text-gray-400">Isi Pesan</label>
+                  <label className="text-xs font-medium text-gray-400">Message Content</label>
                   <textarea
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
-                    placeholder="Tulis pesan Anda di sini..."
+                    placeholder="Type your message here..."
                     className="input min-h-[150px]"
                     required
                   />
@@ -171,7 +171,7 @@ export default function LeadMessenger() {
                     <div className="w-5 h-5 rounded-full border-2 border-white border-t-transparent animate-spin mx-auto" />
                   ) : (
                     <span className="flex items-center justify-center gap-2">
-                      <Send className="w-4 h-4" /> Kirim Pesan Sekarang
+                      <Send className="w-4 h-4" /> Send Message Now
                     </span>
                   )}
                 </button>
@@ -184,19 +184,19 @@ export default function LeadMessenger() {
             <div className="card p-6 h-full flex flex-col">
               <div className="flex items-center gap-2 mb-6">
                 <Layout className="w-4 h-4 text-gray-400" />
-                <h3 className="text-sm font-medium text-gray-300">Status Pengiriman</h3>
+                <h3 className="text-sm font-medium text-gray-300">Delivery Status</h3>
               </div>
 
               {!result && !loading && (
                 <div className="flex-1 flex flex-col items-center justify-center text-gray-600 text-sm italic">
-                  Belum ada pesan yang dikirim
+                  No messages sent yet
                 </div>
               )}
 
               {loading && (
                 <div className="flex-1 flex flex-col items-center justify-center py-20">
                   <div className="w-10 h-10 rounded-full border-2 border-brand-coral border-t-transparent animate-spin mb-4" />
-                  <p className="text-sm text-gray-400">Mengirim pesan satu per satu...</p>
+                  <p className="text-sm text-gray-400">Sending messages one by one...</p>
                 </div>
               )}
 
@@ -205,13 +205,13 @@ export default function LeadMessenger() {
                   <div className="grid grid-cols-2 gap-4">
                     <div className="bg-bg-tertiary rounded-xl p-4 text-center">
                       <p className="text-2xl font-bold text-green-500">{result.totalSent}</p>
-                      <p className="text-[10px] text-gray-500 uppercase font-bold">Terkirim</p>
+                      <p className="text-[10px] text-gray-500 uppercase font-bold">Sent</p>
                     </div>
                     <div className="bg-bg-tertiary rounded-xl p-4 text-center">
                       <p className={clsx("text-2xl font-bold", result.totalFailed > 0 ? "text-brand-coral" : "text-gray-500")}>
                         {result.totalFailed}
                       </p>
-                      <p className="text-[10px] text-gray-500 uppercase font-bold">Gagal</p>
+                      <p className="text-[10px] text-gray-500 uppercase font-bold">Failed</p>
                     </div>
                   </div>
 

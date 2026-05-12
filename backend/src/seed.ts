@@ -29,7 +29,7 @@ async function seed() {
         id: 'tool_data_scraper',
         name: 'Data Scraper',
         slug: 'data-scraper',
-        description: 'Import data dari CSV, API, atau web scraping.',
+        description: 'Import data from CSV, API, or web scraping.',
         type: 'scraper',
         icon: '🔍',
         config: JSON.stringify({ maxFileSize: '50MB' }),
@@ -38,7 +38,7 @@ async function seed() {
         id: 'tool_ai_content',
         name: 'AI Content Generator',
         slug: 'ai-content',
-        description: 'Generate konten marketing, artikel, dan copy dengan AI (GPT-4).',
+        description: 'Generate marketing content, articles, and copy with AI (GPT-4).',
         type: 'generator',
         icon: '✨',
         config: JSON.stringify({ model: 'gpt-4o-mini' }),
@@ -48,7 +48,7 @@ async function seed() {
         id: 'tool_vending_finder',
         name: 'Vending Client Finder',
         slug: 'vending-finder',
-        description: 'Cari potential clients untuk vending machine business.',
+        description: 'Find potential clients for vending machine business.',
         type: 'finder',
         icon: '🏪',
         config: JSON.stringify({ defaultLocation: 'Jakarta' }),
@@ -58,7 +58,7 @@ async function seed() {
         id: 'tool_site_auditor',
         name: 'SEO & Site Auditor',
         slug: 'site-auditor',
-        description: 'Audit kesehatan teknis dan SEO website secara instan.',
+        description: 'Audit technical health and SEO for any website instantly.',
         type: 'auditor',
         icon: '🌐',
         config: JSON.stringify({ checkSsl: true }),
@@ -68,7 +68,7 @@ async function seed() {
         id: 'tool_lead_messenger',
         name: 'Lead Messenger',
         slug: 'lead-messenger',
-        description: 'Kirim pesan kampanye marketing via Email atau WhatsApp.',
+        description: 'Send marketing campaigns via Email or WhatsApp.',
         type: 'messenger',
         icon: '✉️',
         config: JSON.stringify({ platform: ['email', 'whatsapp'] }),
@@ -80,7 +80,11 @@ async function seed() {
       await client.query(`
         INSERT INTO tools (id, name, slug, description, type, icon, is_active, config)
         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-        ON CONFLICT (slug) DO NOTHING
+        ON CONFLICT (slug) DO UPDATE SET 
+          name = EXCLUDED.name,
+          description = EXCLUDED.description,
+          icon = EXCLUDED.icon,
+          config = EXCLUDED.config
       `, [
         tool.id,
         tool.name,

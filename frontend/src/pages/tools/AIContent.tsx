@@ -54,10 +54,10 @@ export default function AIContent() {
         length,
       });
       setResult(data.result);
-      toast.success('Konten berhasil dibuat!');
+      toast.success('Content generated successfully!');
       queryClient.invalidateQueries({ queryKey: ['history', TOOL_SLUG] });
     } catch (err: any) {
-      toast.error(err.response?.data?.error || 'Gagal membuat konten');
+      toast.error(err.response?.data?.error || 'Failed to generate content');
     } finally {
       setLoading(false);
     }
@@ -66,7 +66,7 @@ export default function AIContent() {
   const copyToClipboard = () => {
     if (!result) return;
     navigator.clipboard.writeText(result.content);
-    toast.success('Berhasil disalin!');
+    toast.success('Copied to clipboard!');
   };
 
   async function handlePublish() {
@@ -85,10 +85,10 @@ export default function AIContent() {
         status: postStatus,
       });
 
-      toast.success('Berhasil dipublikasikan!');
+      toast.success('Published successfully!');
       setShowPublishModal(false);
     } catch (err: any) {
-      toast.error(err.response?.data?.error || 'Gagal mempublikasikan');
+      toast.error(err.response?.data?.error || 'Failed to publish');
     } finally {
       setIsPublishing(false);
     }
@@ -103,7 +103,7 @@ export default function AIContent() {
         </div>
         <div>
           <h1 className="text-xl font-bold text-white">AI Content Generator</h1>
-          <p className="text-sm text-gray-500">Buat konten marketing berkualitas tinggi dalam hitungan detik</p>
+          <p className="text-sm text-gray-500">Create high-quality marketing content in seconds</p>
         </div>
       </div>
 
@@ -135,15 +135,15 @@ export default function AIContent() {
           {/* Left: Tool config */}
           <div className="col-span-12 lg:col-span-4">
             <div className="card p-5 space-y-5">
-              <h3 className="text-sm font-semibold text-white mb-2">Konfigurasi Konten</h3>
+              <h3 className="text-sm font-semibold text-white mb-2">Content Configuration</h3>
               
               <form onSubmit={handleGenerate} className="space-y-4">
                 <div className="space-y-1.5">
-                  <label className="text-xs font-medium text-gray-400">Apa yang ingin Anda buat?</label>
+                  <label className="text-xs font-medium text-gray-400">What would you like to create?</label>
                   <textarea
                     value={prompt}
                     onChange={(e) => setPrompt(e.target.value)}
-                    placeholder="Contoh: Artikel tentang manfaat mesin vending di perkantoran modern..."
+                    placeholder="Example: Blog article about the benefits of vending machines in modern offices..."
                     className="input min-h-[100px] py-3"
                     required
                   />
@@ -159,7 +159,7 @@ export default function AIContent() {
                     </select>
                   </div>
                   <div className="space-y-1.5">
-                    <label className="text-xs font-medium text-gray-400">Nada (Tone)</label>
+                    <label className="text-xs font-medium text-gray-400">Tone</label>
                     <select value={tone} onChange={(e) => setTone(e.target.value as any)} className="input text-xs">
                       <option value="professional">Professional</option>
                       <option value="casual">Casual</option>
@@ -170,7 +170,7 @@ export default function AIContent() {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-xs font-medium text-gray-400">Panjang Konten</label>
+                  <label className="text-xs font-medium text-gray-400">Content Length</label>
                   <div className="flex bg-bg-tertiary rounded-lg p-1">
                     {['short', 'medium', 'long'].map((l) => (
                       <button
@@ -211,7 +211,7 @@ export default function AIContent() {
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
                   <FileText className="w-4 h-4 text-gray-400" />
-                  <h3 className="text-sm font-medium text-gray-300">Hasil AI</h3>
+                  <h3 className="text-sm font-medium text-gray-300">AI Result</h3>
                 </div>
                 {result && (
                   <div className="flex items-center gap-2">
@@ -225,7 +225,7 @@ export default function AIContent() {
                       onClick={copyToClipboard}
                       className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-bg-tertiary border border-border text-xs text-gray-400 hover:text-white transition-colors"
                     >
-                      <Copy className="w-3.5 h-3.5" /> Salin Konten
+                      <Copy className="w-3.5 h-3.5" /> Copy Content
                     </button>
                   </div>
                 )}
@@ -234,14 +234,14 @@ export default function AIContent() {
               {!result && !loading && (
                 <div className="flex-1 flex flex-col items-center justify-center text-gray-600 text-sm italic py-20">
                   <Type className="w-12 h-12 mb-3 opacity-20" />
-                  Isi konfigurasi di samping untuk mulai membuat konten
+                  Configure the settings on the left to start generating content
                 </div>
               )}
 
               {loading && (
                 <div className="flex-1 flex flex-col items-center justify-center py-20">
                   <div className="w-12 h-12 rounded-full border-2 border-brand-blue border-t-transparent animate-spin mb-4" />
-                  <p className="text-sm text-gray-400">AI sedang merangkai kata untuk Anda...</p>
+                  <p className="text-sm text-gray-400">AI is crafting words for you...</p>
                 </div>
               )}
 
@@ -294,7 +294,7 @@ function PublishModal({
       <div className="card w-full max-w-md p-6 border-brand-blue/30 shadow-2xl animate-scale-up">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-lg font-bold text-white flex items-center gap-2">
-            <Globe className="w-5 h-5 text-brand-blue" /> Publish ke Website
+            <Globe className="w-5 h-5 text-brand-blue" /> Publish to Website
           </h3>
           <button onClick={onClose} className="text-gray-500 hover:text-white">
             <X className="w-5 h-5" />
@@ -303,13 +303,13 @@ function PublishModal({
 
         <div className="space-y-5">
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-gray-400">Pilih Target Website</label>
+            <label className="text-xs font-medium text-gray-400">Select Target Website</label>
             <select 
               value={selectedSiteId} 
               onChange={(e) => setSelectedSiteId(e.target.value)}
               className="input text-sm"
             >
-              <option value="">-- Pilih Situs --</option>
+              <option value="">-- Select Site --</option>
               {sites?.map((s: any) => (
                 <option key={s.id} value={s.id}>{s.name}</option>
               ))}
@@ -317,7 +317,7 @@ function PublishModal({
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-gray-400">Status Postingan</label>
+            <label className="text-xs font-medium text-gray-400">Post Status</label>
             <div className="flex bg-bg-tertiary rounded-lg p-1">
               {['draft', 'publish'].map((s) => (
                 <button
@@ -335,13 +335,13 @@ function PublishModal({
           </div>
 
           <div className="pt-4 flex gap-3">
-            <button onClick={onClose} className="btn btn-secondary flex-1">Batal</button>
+            <button onClick={onClose} className="btn btn-secondary flex-1">Cancel</button>
             <button 
               onClick={onPublish} 
               disabled={loading || !selectedSiteId}
               className="btn btn-primary flex-1 flex items-center justify-center gap-2"
             >
-              {loading ? 'Publishing...' : <><Send className="w-4 h-4" /> Publish Sekarang</>}
+              {loading ? 'Publishing...' : <><Send className="w-4 h-4" /> Publish Now</>}
             </button>
           </div>
         </div>

@@ -50,7 +50,7 @@ export default function DataScraper() {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       setResult(data.result);
-      toast.success(`Import selesai! ${data.result.rowsImported} rows imported.`);
+      toast.success(`Import complete! ${data.result.rowsImported} rows imported.`);
       queryClient.invalidateQueries({ queryKey: ['history', TOOL_SLUG] });
     } catch (err: any) {
       toast.error(err.response?.data?.error || 'Import failed');
@@ -68,7 +68,7 @@ export default function DataScraper() {
         ...data,
       });
       setResult(res.result);
-      toast.success(`API import selesai! ${res.result.rowsImported} rows fetched.`);
+      toast.success(`API import complete! ${res.result.rowsImported} rows fetched.`);
       queryClient.invalidateQueries({ queryKey: ['history', TOOL_SLUG] });
     } catch (err: any) {
       toast.error(err.response?.data?.error || 'API import failed');
@@ -87,7 +87,7 @@ export default function DataScraper() {
         selectors: JSON.stringify(data.selectors),
       });
       setResult(res.result);
-      toast.success(`Scraping selesai! ${res.result.rowsImported} rows extracted.`);
+      toast.success(`Scraping complete! ${res.result.rowsImported} rows extracted.`);
       queryClient.invalidateQueries({ queryKey: ['history', TOOL_SLUG] });
     } catch (err: any) {
       toast.error(err.response?.data?.error || 'Scraping failed');
@@ -105,7 +105,7 @@ export default function DataScraper() {
         </div>
         <div>
           <h1 className="text-xl font-bold text-white">Data Scraper</h1>
-          <p className="text-sm text-gray-500">Import data dari CSV, API, atau web scraping</p>
+          <p className="text-sm text-gray-500">Import data from CSV, API, or web scraping</p>
         </div>
       </div>
 

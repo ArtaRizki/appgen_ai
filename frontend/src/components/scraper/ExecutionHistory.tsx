@@ -77,7 +77,7 @@ export default function ExecutionHistory({ toolSlug }: ExecutionHistoryProps) {
                 </div>
                 <div className="flex items-center gap-3 text-xs text-gray-600">
                   {exec.duration && <span>{exec.duration}ms</span>}
-                  <span>{new Date(exec.createdAt).toLocaleString('id-ID')}</span>
+                  <span>{new Date(exec.createdAt).toLocaleString('en-US')}</span>
                 </div>
               </div>
 
