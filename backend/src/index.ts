@@ -8,6 +8,7 @@ import authRoutes from './routes/auth';
 import toolsRoutes from './routes/tools/index';
 import executeRoutes from './routes/tools/execute';
 import historyRoutes from './routes/tools/history';
+import sitesRoutes from './routes/sites';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -17,12 +18,9 @@ const PgSession = connectPgSimple(session);
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
-const allowedOrigins = (process.env.CORS_ORIGINS || 'http://localhost:3000').split(',');
+// Allow all origins (No strict CORS)
 app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
-    callback(new Error('Not allowed by CORS'));
-  },
+  origin: true,
   credentials: true,
 }));
 
@@ -53,6 +51,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/tools', toolsRoutes);
 app.use('/api/tools', executeRoutes);
 app.use('/api/tools', historyRoutes);
+app.use('/api/sites', sitesRoutes);
 
 // 404 handler
 app.use((_req, res) => {

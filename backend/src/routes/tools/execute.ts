@@ -6,6 +6,10 @@ import { eq } from 'drizzle-orm';
 import { requireAuth } from '../../middleware/auth';
 import { nanoid } from 'nanoid';
 import { ScraperService } from '../../services/tools/scraper/index';
+import { VendingFinderService } from '../../services/tools/vending-finder/index';
+import { AiGeneratorService } from '../../services/tools/generator/ai';
+import { SeoAuditorService } from '../../services/tools/auditor/seo';
+import { MessengerService } from '../../services/tools/messenger/sender';
 
 const router = Router();
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 50 * 1024 * 1024 } });
@@ -97,6 +101,85 @@ router.post('/:toolId/execute', requireAuth, upload.single('file'), async (req: 
         duration,
       });
     }
+
+    // Vending Finder Tool
+    if (tool.slug === 'vending-finder') {
+      const { location, category, pushToDataBridge } = req.body;
+
+      if (!location || !category) {
+        await db.update(toolExecutions)
+          .set({ status: 'error', error: 'Location and category are required' })
+          .where(eq(toolExecutions.id, executionId));
+        return res.status(400).json({ error: 'Location and category are required' });
+      }
+
+      const finderService = new VendingFinderService();
+      let result;
+
+      try {
+        result = await finderService.execute({
+          location,
+          category,
+          pushToDataBridge: pushToDataBridge === 'true' || pushToDataBridge === true,
+        });
+      } catch (finderErr: any) {
+        const duration = Date.now() - startTime;
+        await db.update(toolExecutions)
+          .set({ status: 'error', error: finderErr.message, duration })
+          .where(eq(toolExecutions.id, executionId));
+
+        return res.status(422).json({
+          executionId,
+          status: 'error',
+          error: finderErr.message,
+        });
+      }
+
+      const duration = Date.now() - startTime;
+      
+      // Update execution as success
+      await db.update(toolExecutions)
+        .set({ status: 'success', output: result, duration })
+        .where(eq(toolExecutions.id, executionId));
+
+      return res.json({
+        executionId,
+        status: 'success',
+        result,
+        duration,
+      });
+    }
+
+    // AI Content Generator
+    if (tool.slug === 'ai-content') {
+      const { prompt, type, tone, length, language } = req.body;
+      const aiService = new AiGeneratorService();
+      const result = await aiService.execute({ prompt, type, tone, length, language });
+      const duration = Date.now() - startTime;
+      await db.update(toolExecutions).set({ status: 'success', output: result, duration }).where(eq(toolExecutions.id, executionId));
+      return res.json({ executionId, status: 'success', result, duration });
+    }
+
+    // Site Auditor
+    if (tool.slug === 'site-auditor') {
+      const { url } = req.body;
+      const auditorService = new SeoAuditorService();
+      const result = await auditorService.execute({ url });
+      const duration = Date.now() - startTime;
+      await db.update(toolExecutions).set({ status: 'success', output: result, duration }).where(eq(toolExecutions.id, executionId));
+      return res.json({ executionId, status: 'success', result, duration });
+    }
+
+    // Lead Messenger
+    if (tool.slug === 'lead-messenger') {
+      const { platform, recipients, subject, message } = req.body;
+      const messengerService = new MessengerService();
+      const result = await messengerService.execute({ platform, recipients, subject, message });
+      const duration = Date.now() - startTime;
+      await db.update(toolExecutions).set({ status: 'success', output: result, duration }).where(eq(toolExecutions.id, executionId));
+      return res.json({ executionId, status: 'success', result, duration });
+    }
+
 
     // For future tools — generic response
     await db.update(toolExecutions)

@@ -63,6 +63,15 @@ const createTables = `
     preview_data JSONB,
     created_at TIMESTAMP DEFAULT NOW() NOT NULL
   );
+
+  CREATE TABLE IF NOT EXISTS managed_sites (
+    id VARCHAR(36) PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    url VARCHAR(255) NOT NULL,
+    type VARCHAR(50) NOT NULL DEFAULT 'wordpress',
+    credentials JSONB,
+    created_at TIMESTAMP DEFAULT NOW() NOT NULL
+  );
 `;
 
 async function migrate() {

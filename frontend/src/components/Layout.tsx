@@ -10,14 +10,19 @@ import {
   LogOut,
   Wrench,
   ChevronRight,
+  Globe,
+  MessageSquare,
 } from 'lucide-react';
 import clsx from 'clsx';
 
 const navItems = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard, exact: true },
   { to: '/tools/data-scraper', label: 'Data Scraper', icon: Search },
-  { to: '/tools/ai-content', label: 'AI Content', icon: Sparkles, disabled: true },
-  { to: '/tools/vending-finder', label: 'Vending Finder', icon: ShoppingCart, disabled: true },
+  { to: '/tools/vending-finder', label: 'Vending Finder', icon: ShoppingCart },
+  { to: '/tools/ai-content', label: 'AI Content', icon: Sparkles },
+  { to: '/tools/site-auditor', label: 'Site Auditor', icon: Globe },
+  { to: '/tools/lead-messenger', label: 'Lead Messenger', icon: MessageSquare },
+  { to: '/sites', label: 'Site Manager', icon: Globe },
 ];
 
 export default function Layout() {
@@ -53,40 +58,25 @@ export default function Layout() {
 
         {/* Nav */}
         <nav className="flex-1 p-3 space-y-0.5">
-          {navItems.map((item) => {
-            if (item.disabled) {
-              return (
-                <div
-                  key={item.to}
-                  className="flex items-center gap-2.5 px-3 py-2 rounded-lg text-gray-600 cursor-not-allowed group"
-                >
-                  <item.icon className="w-4 h-4" />
-                  <span className="text-sm">{item.label}</span>
-                  <span className="ml-auto text-[10px] bg-bg-tertiary text-gray-600 px-1.5 py-0.5 rounded">Soon</span>
-                </div>
-              );
-            }
-
-            return (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                end={item.exact}
-                className={({ isActive }) =>
-                  clsx(
-                    'flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors group',
-                    isActive
-                      ? 'bg-brand-blue/10 text-brand-blue border border-brand-blue/20'
-                      : 'text-gray-400 hover:text-gray-200 hover:bg-bg-tertiary'
-                  )
-                }
-              >
-                <item.icon className="w-4 h-4" />
-                <span>{item.label}</span>
-                <ChevronRight className="w-3 h-3 ml-auto opacity-0 group-hover:opacity-50 transition-opacity" />
-              </NavLink>
-            );
-          })}
+          {navItems.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              end={item.exact}
+              className={({ isActive }) =>
+                clsx(
+                  'flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors group',
+                  isActive
+                    ? 'bg-brand-blue/10 text-brand-blue border border-brand-blue/20'
+                    : 'text-gray-400 hover:text-gray-200 hover:bg-bg-tertiary'
+                )
+              }
+            >
+              <item.icon className="w-4 h-4" />
+              <span>{item.label}</span>
+              <ChevronRight className="w-3 h-3 ml-auto opacity-0 group-hover:opacity-50 transition-opacity" />
+            </NavLink>
+          ))}
         </nav>
 
         {/* User */}

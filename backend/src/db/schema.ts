@@ -77,6 +77,16 @@ export const scraperJobs = pgTable('scraper_jobs', {
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 
+// ─── Managed Sites (for Auto-Posting) ────────────────────────────────────────
+export const managedSites = pgTable('managed_sites', {
+  id: varchar('id', { length: 36 }).primaryKey(),
+  name: varchar('name', { length: 255 }).notNull(),
+  url: varchar('url', { length: 255 }).notNull(),
+  type: varchar('type', { length: 50 }).default('wordpress').notNull(),
+  credentials: jsonb('credentials'), // { username, appPassword }
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
 // ─── Type Exports ─────────────────────────────────────────────────────────────
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
@@ -86,3 +96,5 @@ export type ToolExecution = typeof toolExecutions.$inferSelect;
 export type NewToolExecution = typeof toolExecutions.$inferInsert;
 export type ScraperJob = typeof scraperJobs.$inferSelect;
 export type NewScraperJob = typeof scraperJobs.$inferInsert;
+export type ManagedSite = typeof managedSites.$inferSelect;
+export type NewManagedSite = typeof managedSites.$inferInsert;
