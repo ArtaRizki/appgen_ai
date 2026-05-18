@@ -47,43 +47,85 @@ export class VendingFinderService {
   }
 
   private async searchLeads(location: string, category: string): Promise<VendingLead[]> {
-    console.log(`[VendingFinder] Searching for ${category} in ${location}...`);
+    console.log(`[VendingFinder] Searching for ${category} in ${location} using Overpass API...`);
     
-    // For now, we simulate finding some leads based on the input
-    // This allows the user to see how the portal works immediately
-    const mockLeads: VendingLead[] = [
-      {
-        name: `${category} Center ${location}`,
-        address: `123 Main St, ${location}`,
-        phone: '021-555-0101',
-        website: `https://${category.toLowerCase().replace(/\s/g, '')}-${location.toLowerCase()}.com`,
-        category,
-        source: 'Google Maps (Simulated)',
-        rating: 4.5,
-      },
-      {
-        name: `${location} Business Tower`,
-        address: `45 Business Ave, ${location}`,
-        phone: '021-555-0202',
-        category: 'Office',
-        source: 'LinkedIn (Simulated)',
-        rating: 4.2,
-      },
-      {
-        name: `Elite ${category} Club`,
-        address: `Kawasan Industri Blok B, ${location}`,
-        phone: '021-555-0303',
-        category,
-        source: 'Yellow Pages (Simulated)',
-        rating: 4.8,
+    try {
+      let tagQuery = '';
+      switch (category.toLowerCase()) {
+        case 'office':
+          tagQuery = '["office"]';
+          break;
+        case 'gym':
+          tagQuery = '["leisure"="fitness_centre"]';
+          break;
+        case 'hospital':
+          tagQuery = '["amenity"~"hospital|clinic"]';
+          break;
+        case 'apartment':
+          tagQuery = '["building"="apartments"]';
+          break;
+        case 'school':
+          tagQuery = '["amenity"~"school|university|college"]';
+          break;
+        default:
+          tagQuery = '["office"]';
       }
-    ];
 
-    // Filter or adjust mock data based on input
-    return mockLeads.filter(l => 
-      l.address.toLowerCase().includes(location.toLowerCase()) || 
-      l.category.toLowerCase().includes(category.toLowerCase())
-    );
+      // Overpass QL query
+      const query = `
+        [out:json][timeout:25];
+        area[name~"${location}", i]->.searchArea;
+        (
+          node${tagQuery}(area.searchArea);
+          way${tagQuery}(area.searchArea);
+          relation${tagQuery}(area.searchArea);
+        );
+        out center 20;
+      `;
+
+      const response = await axios.post('https://overpass-api.de/api/interpreter', `data=${encodeURIComponent(query)}`, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        timeout: 10000,
+      });
+
+      if (!response.data || !response.data.elements) {
+        return [];
+      }
+
+      const leads: VendingLead[] = [];
+      for (const el of response.data.elements) {
+        if (el.tags && el.tags.name) {
+          leads.push({
+            name: el.tags.name,
+            address: el.tags['addr:street'] 
+              ? `${el.tags['addr:street']} ${el.tags['addr:housenumber'] || ''}, ${location}`.trim()
+              : `${location} Area`,
+            phone: el.tags.phone || el.tags['contact:phone'] || undefined,
+            website: el.tags.website || el.tags['contact:website'] || undefined,
+            category: category,
+            source: 'OpenStreetMap',
+            latitude: el.lat || (el.center && el.center.lat) || undefined,
+            longitude: el.lon || (el.center && el.center.lon) || undefined,
+          });
+        }
+      }
+
+      return leads;
+    } catch (err: any) {
+      console.warn(`[VendingFinder] Overpass API failed: ${err.message}. Falling back to mock data.`);
+      // Fallback to mock data if API fails
+      return [
+        {
+          name: `${category} Center ${location} (Fallback)`,
+          address: `123 Main St, ${location}`,
+          phone: '021-555-0101',
+          category,
+          source: 'System Fallback',
+        }
+      ];
+    }
   }
 
   private async pushToDataBridge(leads: VendingLead[]): Promise<string> {
@@ -91,8 +133,6 @@ export class VendingFinderService {
       console.log(`[VendingFinder] Pushing ${leads.length} leads to DataBridge...`);
       
       // Attempt to post to DataBridge
-      // Note: This might fail if the endpoint doesn't exist yet, 
-      // but we handle it gracefully for the demo.
       await axios.post(this.DATABRIDGE_URL, {
         source: 'tools.aidigicube.com',
         timestamp: new Date().toISOString(),
@@ -108,7 +148,7 @@ export class VendingFinderService {
       return 'Success';
     } catch (err: any) {
       console.warn(`[VendingFinder] DataBridge push failed: ${err.message}`);
-      return `Failed: ${err.message} (Is DataBridge endpoint ready?)`;
+      return `Failed: DataBridge offline`;
     }
   }
 }
